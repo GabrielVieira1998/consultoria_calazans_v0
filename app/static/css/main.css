@@ -279,6 +279,35 @@ footer a:hover {
   border-radius: 12px;
   box-shadow: 0 4px 16px rgba(57,119,123,0.07);
   overflow: hidden;
+  width: 100%;
+}
+
+/* Melhorias para tabelas responsivas em dispositivos móveis */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.table-responsive table {
+  width: 100%;
+  min-width: 650px; /* Garante que a tabela tenha uma largura mínima */
+}
+
+.table-responsive .btn {
+  white-space: nowrap;
+  margin-bottom: 5px;
+}
+
+/* Em telas muito pequenas, empilhar os botões de ação */
+@media (max-width: 576px) {
+  .table-responsive .btn {
+    display: block;
+    width: 100%;
+    margin-right: 0;
+  }
 }
 
 /* Animations */
