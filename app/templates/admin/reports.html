@@ -47,11 +47,14 @@
 
 {% block content %}
 <div class="container py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
         <h1>Relatórios de Leads</h1>
-        <a href="{{ url_for('admin.qualified_leads') }}" class="btn btn-primary">
-            <i class="fas fa-star me-1"></i> Ver Leads Qualificados
-        </a>
+        <div class="mt-2 mt-md-0">
+            <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-secondary me-2 mb-2 mb-md-0">Voltar ao Painel</a>
+            <a href="{{ url_for('admin.qualified_leads') }}" class="btn btn-primary">
+                <i class="fas fa-star me-1"></i> Ver Leads Qualificados
+            </a>
+        </div>
     </div>
     
     <!-- Navegação das abas -->
