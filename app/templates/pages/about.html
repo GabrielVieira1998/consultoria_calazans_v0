@@ -1,0 +1,109 @@
+{% extends "layout.html" %}
+
+{% block title %}Sobre a Consultoria Calazans{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-lg-6 text-center mb-4 mb-lg-0">
+                <img src="{{ url_for('static', filename='images/logo_oficial.jpeg') }}" alt="Logo Consultoria Calazans" class="logo-circular mb-4" style="max-width: 320px; width: 100%; height: auto; box-shadow: 0 4px 24px rgba(57,119,123,0.10); background: #fff; border-radius: 50%; border: 3px solid var(--verde-petroleo);">
+            </div>
+            <div class="col-lg-6">
+                <h1 class="mb-4">Sobre a Consultoria Calazans</h1>
+                <p>Idealizada por Andressa Calazans, profissional de Educação Física com pós-graduação em lesões e doenças musculoesqueléticas, a Calazans Consultoria de treinos online foi criada pensando em você, mulher e mãe.</p>
+                <p>Sabemos que a rotina é intensa e que, muitas vezes, as dores e lesões posturais acabam se tornando parte do dia a dia, dificultando seus objetivos físicos e seu bem-estar. Nosso trabalho é justamente oferecer um caminho eficiente para que você trate suas dores e lesões, enquanto alcança suas metas de forma segura.</p>
+                <p>Com treinos totalmente individualizados e adaptados à sua rotina e necessidades, a Calazans Consultoria vai te ajudar a resgatar o prazer de se movimentar, sentir seu corpo mais forte e livre de desconfortos. Mais do que treinos, oferecemos o suporte e o acolhimento que você merece para cuidar de si mesma e no seu tempo.</p>
+                <p>Com uma abordagem personalizada e cuidadosa, a Consultoria Calazans tem ajudado centenas de mulheres a recuperarem seus corpos e sua qualidade de vida através de treinos online adaptados às necessidades específicas de cada aluna.</p>
+                <p>Utillzando metodologias comprovadas e acomparhamento contínuo, nossa missão é proporcionar a você uma recuperação segura e eficiente, respeitando seu ritmo e suas limitações.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Missão, Visão e Valores -->
+<section class="py-5 bg-calazans-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center mb-5">
+                <h2 class="mb-4">Nossa Missão</h2>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body">
+                                <h3 class="card-title h4 mb-3">Visão</h3>
+                                <p class="card-text">
+                                    Ser a principal referência em consultoria de treinos online para mulheres e mães, inspirando-as a redescobrir sua força, bem-estar e a viverem sem dores, tornando o autocuidado uma parte essencial e prazerosa de suas vidas.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body">
+                                <h3 class="card-title h4 mb-3">Valores</h3>
+                                <ul class="card-text">
+                                    <li>Empatia e compreensão das limitações individuais</li>
+                                    <li>Profissionalismo e excelência técnica</li>
+                                    <li>Personalização e atenção às necessidades específicas</li>
+                                    <li>Compromisso com resultados reais e duradouros</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Metodologia -->
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center mb-5">
+                <h2 class="mb-4">Nossa Metodologia</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="feature-item shadow-sm h-100 text-center p-4">
+                    <div class="mb-3">
+                        <span class="badge rounded-pill bg-calazans-primary fs-4 p-2">1</span>
+                    </div>
+                    <h3 class="h5 mb-3">Avaliação Detalhada</h3>
+                    <p class="text-muted mb-0">
+                        Começamos com uma avaliação completa das suas necessidades, limitações e objetivos, para entender profundamente sua situação.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="feature-item shadow-sm h-100 text-center p-4">
+                    <div class="mb-3">
+                        <span class="badge rounded-pill bg-calazans-primary fs-4 p-2">2</span>
+                    </div>
+                    <h3 class="h5 mb-3">Planejamento Personalizado</h3>
+                    <p class="text-muted mb-0">
+                        Desenvolvemos um plano de treinos específico para suas necessidades, considerando seu histórico e objetivos pessoais.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="feature-item shadow-sm h-100 text-center p-4">
+                    <div class="mb-3">
+                        <span class="badge rounded-pill bg-calazans-primary fs-4 p-2">3</span>
+                    </div>
+                    <h3 class="h5 mb-3">Acompanhamento Contínuo</h3>
+                    <p class="text-muted mb-0">
+                        Oferecemos suporte constante, ajustando seu programa conforme sua evolução e garantindo resultados seguros e efetivos.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %} 

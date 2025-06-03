@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %}Consultoria Calazans - Login{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="card shadow">
+                    <div class="card-header bg-white text-center py-4">
+                        <h3 class="mb-0">Área Administrativa</h3>
+                    </div>
+                    <div class="card-body p-4">
+                        <form method="post" action="{{ url_for('auth.login') }}">
+                            <div class="mb-4">
+                                <label for="password" class="form-label">Senha</label>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Digite a senha de administrador" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Entrar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %} 

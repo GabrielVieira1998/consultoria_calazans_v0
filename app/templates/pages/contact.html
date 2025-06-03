@@ -1,0 +1,82 @@
+{% extends "layout.html" %}
+
+{% block title %}Consultoria Calazans - Contato{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-calazans-light py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h1 class="mb-4">Entre em Contato</h1>
+                <p class="lead">
+                    Estamos aqui para ajudar você a iniciar sua jornada de recuperação.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Form Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow">
+                    <div class="card-header bg-white">
+                        <h4 class="mb-0">Formulário de Contato</h4>
+                        <p class="text-muted mb-0 small">
+                            Preencha o formulário abaixo para solicitar mais informações ou agendar uma consulta online.
+                        </p>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" action="{{ url_for('main.contact') }}">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Nome Completo</label>
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Seu nome completo" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="email" class="form-label">E-mail</label>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="seu.email@exemplo.com" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Telefone</label>
+                                <input type="tel" class="form-control" id="phone" name="phone" placeholder="(00) 00000-0000" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Qual sua principal necessidade?</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="issue" id="dor_lombar" value="dor_lombar">
+                                    <label class="form-check-label" for="dor_lombar">Dor Lombar</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="issue" id="pos_parto" value="pos_parto">
+                                    <label class="form-check-label" for="pos_parto">Recuperação Pós-parto</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="issue" id="lesao" value="lesao">
+                                    <label class="form-check-label" for="lesao">Recuperação de Lesão</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="issue" id="outro" value="outro" checked>
+                                    <label class="form-check-label" for="outro">Outro</label>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="message" class="form-label">Mensagem</label>
+                                <textarea class="form-control" id="message" name="message" rows="4" placeholder="Descreva sua situação e como podemos ajudar..." required></textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary w-100">Enviar Mensagem</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %} 

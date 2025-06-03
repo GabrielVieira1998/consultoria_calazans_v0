@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+
+{% block title %}Consultoria Calazans - Gerenciamento de Links UTM{% endblock %}
+
+{% block content %}
+<section class="py-4">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Gerenciamento de Links UTM</h1>
+            <div>
+                <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-secondary me-2">Voltar ao Painel</a>
+                <a href="{{ url_for('admin.add_utm_link_route') }}" class="btn btn-primary">Adicionar Novo Link UTM</a>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">O que são links UTM?</h5>
+                <p class="card-text">Os parâmetros UTM são tags adicionadas ao final das URLs para rastrear a eficácia de campanhas de marketing online. 
+                Eles permitem identificar a origem dos visitantes, o tipo de campanha e outras informações importantes para análise de desempenho.</p>
+            </div>
+        </div>
+        
+        {% if links %}
+        <div class="table-responsive admin-table">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>URL Base</th>
+                        <th>Fonte</th>
+                        <th>Campanha</th>
+                        <th>Data de Criação</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for link in links %}
+                    <tr>
+                        <td>{{ link.name }}</td>
+                        <td>{{ link.base_url }}</td>
+                        <td>{{ link.utm_source }}</td>
+                        <td>{{ link.utm_campaign }}</td>
+                        <td>{{ link.created_at }}</td>
+                        <td>
+                            <a href="{{ url_for('admin.view_utm_link_route', id=link.id) }}" class="btn btn-sm btn-outline-info">Visualizar</a>
+                            <a href="{{ url_for('admin.edit_utm_link_route', id=link.id) }}" class="btn btn-sm btn-outline-primary">Editar</a>
+                            <a href="{{ url_for('admin.delete_utm_link_route', id=link.id) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Tem certeza que deseja excluir este link UTM?')">Excluir</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+            <p>Nenhum link UTM cadastrado. Clique no botão "Adicionar Novo Link UTM" para começar.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %} 

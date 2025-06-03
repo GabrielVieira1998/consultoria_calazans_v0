@@ -1,0 +1,117 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ 'Editar' if utm_link else 'Adicionar' }} Link UTM - Admin{% endblock %}
+
+{% block content %}
+<section class="py-4">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-lg-8">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">{{ 'Editar' if utm_link else 'Adicionar' }} Link UTM</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" class="needs-validation" novalidate>
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Nome da Campanha</label>
+                                <input type="text" class="form-control" id="name" name="name" value="{{ utm_link.name if utm_link else '' }}" required>
+                                <div class="invalid-feedback">
+                                    Por favor, informe um nome para identificar esta campanha.
+                                </div>
+                                <small class="form-text text-muted">Ex: Campanha Instagram Julho 2023</small>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="base_url" class="form-label">URL Base</label>
+                                <input type="url" class="form-control" id="base_url" name="base_url" value="{{ utm_link.base_url if utm_link else '' }}" required>
+                                <div class="invalid-feedback">
+                                    Por favor, informe uma URL base válida.
+                                </div>
+                                <small class="form-text text-muted">Ex: https://consultoriacalazans.com</small>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="utm_source" class="form-label">Fonte (utm_source) <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="utm_source" name="utm_source" value="{{ utm_link.utm_source if utm_link else '' }}" required>
+                                    <div class="invalid-feedback">
+                                        Por favor, informe a fonte da campanha.
+                                    </div>
+                                    <small class="form-text text-muted">Ex: google, facebook, instagram</small>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="utm_medium" class="form-label">Mídia (utm_medium) <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="utm_medium" name="utm_medium" value="{{ utm_link.utm_medium if utm_link else '' }}" required>
+                                    <div class="invalid-feedback">
+                                        Por favor, informe o tipo de mídia.
+                                    </div>
+                                    <small class="form-text text-muted">Ex: cpc, email, social</small>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="utm_campaign" class="form-label">Campanha (utm_campaign) <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="utm_campaign" name="utm_campaign" value="{{ utm_link.utm_campaign if utm_link else '' }}" required>
+                                <div class="invalid-feedback">
+                                    Por favor, informe o nome da campanha.
+                                </div>
+                                <small class="form-text text-muted">Ex: black_friday, promocao_verao</small>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="utm_term" class="form-label">Termo (utm_term)</label>
+                                    <input type="text" class="form-control" id="utm_term" name="utm_term" value="{{ utm_link.utm_term if utm_link else '' }}">
+                                    <small class="form-text text-muted">Ex: fisioterapia, treinamento</small>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="utm_content" class="form-label">Conteúdo (utm_content)</label>
+                                    <input type="text" class="form-control" id="utm_content" name="utm_content" value="{{ utm_link.utm_content if utm_link else '' }}">
+                                    <small class="form-text text-muted">Ex: banner_topo, story_link</small>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="short_description" class="form-label">Descrição curta</label>
+                                <textarea class="form-control" id="short_description" name="short_description" rows="2">{{ utm_link.short_description if utm_link else '' }}</textarea>
+                                <small class="form-text text-muted">Uma breve descrição para ajudar a identificar o propósito deste link.</small>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between">
+                                <a href="{{ url_for('admin.utm_links') }}" class="btn btn-outline-secondary">Cancelar</a>
+                                <button type="submit" class="btn btn-primary">{{ 'Atualizar' if utm_link else 'Adicionar' }} Link UTM</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% block extra_js %}
+<script>
+    // Formulário com validação Bootstrap
+    (function () {
+        'use strict'
+        
+        var forms = document.querySelectorAll('.needs-validation')
+        
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+</script>
+{% endblock %}
+{% endblock %} 

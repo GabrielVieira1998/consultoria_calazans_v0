@@ -1,0 +1,392 @@
+{% extends "layout.html" %}
+
+{% block title %}Relatórios - Admin{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.css">
+<style>
+    .dashboard-card {
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        transition: transform 0.3s;
+        height: 100%;
+    }
+    .dashboard-card:hover {
+        transform: translateY(-5px);
+    }
+    .metric-card {
+        border-left: 4px solid var(--verde-petroleo);
+        border-radius: 6px;
+    }
+    .metric-value {
+        font-size: 2rem;
+        font-weight: 600;
+        color: var(--verde-petroleo);
+    }
+    .metric-label {
+        color: var(--cinza-medio);
+        font-size: 0.9rem;
+    }
+    .growth-positive {
+        color: #28a745;
+    }
+    .growth-negative {
+        color: #dc3545;
+    }
+    .nav-tabs .nav-link.active {
+        border-bottom: 3px solid var(--verde-petroleo);
+        font-weight: 500;
+    }
+    .chart-container {
+        position: relative;
+        height: 300px;
+        width: 100%;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Relatórios de Leads</h1>
+        <a href="{{ url_for('admin.qualified_leads') }}" class="btn btn-primary">
+            <i class="fas fa-star me-1"></i> Ver Leads Qualificados
+        </a>
+    </div>
+    
+    <!-- Navegação das abas -->
+    <ul class="nav nav-tabs mb-4">
+        <li class="nav-item">
+            <a class="nav-link active" data-bs-toggle="tab" href="#dashboard">Dashboard</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#leads-table">Tabela de Leads</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#source-analysis">Análise de Fontes</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('admin.qualified_leads') }}">Leads Qualificados</a>
+        </li>
+    </ul>
+    
+    <div class="tab-content">
+        <!-- Aba Dashboard -->
+        <div class="tab-pane fade show active" id="dashboard">
+            <!-- Cards de métricas -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card dashboard-card mb-3">
+                        <div class="card-body">
+                            <div class="metric-card p-3">
+                                <p class="metric-value mb-0">{{ dashboard.totals.total_leads }}</p>
+                                <p class="metric-label mb-0">Total de Leads</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card dashboard-card mb-3">
+                        <div class="card-body">
+                            <div class="metric-card p-3">
+                                <p class="metric-value mb-0">{{ dashboard.totals.last_30_days }}</p>
+                                <p class="metric-label mb-0">Leads nos últimos 30 dias</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card dashboard-card mb-3">
+                        <div class="card-body">
+                            <div class="metric-card p-3">
+                                <p class="metric-value mb-0">{{ dashboard.totals.last_7_days }}</p>
+                                <p class="metric-label mb-0">Leads na última semana</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card dashboard-card mb-3">
+                        <div class="card-body">
+                            <div class="metric-card p-3">
+                                <p class="metric-value mb-0">
+                                    {{ dashboard.growth_percentage }}%
+                                    {% if dashboard.growth_percentage >= 0 %}
+                                    <i class="fas fa-arrow-up growth-positive"></i>
+                                    {% else %}
+                                    <i class="fas fa-arrow-down growth-negative"></i>
+                                    {% endif %}
+                                </p>
+                                <p class="metric-label mb-0">Crescimento no mês atual</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Gráficos -->
+            <div class="row mb-4">
+                <div class="col-md-8">
+                    <div class="card dashboard-card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Leads por Mês</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="monthlyLeadsChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card dashboard-card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Leads por Fonte</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="sourceChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card dashboard-card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Leads por Campanha</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="campaignChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card dashboard-card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Leads Recentes</h5>
+                            <a href="{{ url_for('admin.qualified_leads') }}" class="btn btn-sm btn-outline-primary">Ver todos</a>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Data</th>
+                                            <th>Nome</th>
+                                            <th>Fonte</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for lead in leads[:5] %}
+                                        <tr>
+                                            <td>{{ lead.created_at }}</td>
+                                            <td>{{ lead.name }}</td>
+                                            <td>{{ lead.source or 'Direto' }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Aba Tabela de Leads -->
+        <div class="tab-pane fade" id="leads-table">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Detalhes dos Leads</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Nome</th>
+                                    <th>Email</th>
+                                    <th>Fonte</th>
+                                    <th>Campanha</th>
+                                    <th>Mídia</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for lead in leads %}
+                                <tr>
+                                    <td>{{ lead.created_at }}</td>
+                                    <td>{{ lead.name }}</td>
+                                    <td>{{ lead.email }}</td>
+                                    <td>{{ lead.source or 'Direto' }}</td>
+                                    <td>{{ lead.utm_campaign or '-' }}</td>
+                                    <td>{{ lead.utm_medium or '-' }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Aba Análise de Fontes -->
+        <div class="tab-pane fade" id="source-analysis">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Leads por Fonte</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Fonte</th>
+                                    <th>Total de Leads</th>
+                                    <th>Últimos 30 dias</th>
+                                    <th>% do Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for source in sources %}
+                                <tr>
+                                    <td>{{ source.source or 'Direto' }}</td>
+                                    <td>{{ source.total }}</td>
+                                    <td>{{ source.last_30_days }}</td>
+                                    <td>
+                                        {% if dashboard.totals.total_leads > 0 %}
+                                            {{ ((source.total / dashboard.totals.total_leads) * 100) | round(1) }}%
+                                        {% else %}
+                                            0%
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+<script>
+    // Dados para os gráficos
+    const chartData = JSON.parse('{{ chart_json|safe }}');
+    
+    // Cores para os gráficos
+    const chartColors = [
+        'rgba(57, 119, 123, 0.8)',
+        'rgba(36, 80, 82, 0.8)',
+        'rgba(244, 207, 195, 0.8)',
+        'rgba(96, 98, 102, 0.8)',
+        'rgba(250, 249, 247, 0.8)',
+    ];
+    
+    // Configuração para gráfico de barras (Leads por Mês)
+    const monthlyChart = new Chart(
+        document.getElementById('monthlyLeadsChart'),
+        {
+            type: 'bar',
+            data: {
+                labels: chartData.monthly_leads.labels,
+                datasets: [{
+                    label: 'Número de Leads',
+                    data: chartData.monthly_leads.data,
+                    backgroundColor: chartColors[0],
+                    borderColor: chartColors[0],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        }
+                    }
+                }
+            }
+        }
+    );
+    
+    // Configuração para gráfico de pizza (Leads por Fonte)
+    const sourceChart = new Chart(
+        document.getElementById('sourceChart'),
+        {
+            type: 'doughnut',
+            data: {
+                labels: chartData.leads_by_source.labels,
+                datasets: [{
+                    data: chartData.leads_by_source.data,
+                    backgroundColor: chartColors,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        }
+    );
+    
+    // Configuração para gráfico de barras horizontais (Leads por Campanha)
+    const campaignChart = new Chart(
+        document.getElementById('campaignChart'),
+        {
+            type: 'bar',
+            data: {
+                labels: chartData.leads_by_campaign.labels,
+                datasets: [{
+                    axis: 'y',
+                    label: 'Número de Leads',
+                    data: chartData.leads_by_campaign.data,
+                    backgroundColor: chartColors[1],
+                    borderColor: chartColors[1],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        }
+                    }
+                }
+            }
+        }
+    );
+</script>
+{% endblock %} 

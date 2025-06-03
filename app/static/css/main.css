@@ -1,0 +1,319 @@
+/* Variáveis de cores baseadas na identidade visual Calazans */
+:root {
+  --verde-petroleo: #39777B;
+  --verde-petroleo-escuro: #245052;
+  --pessego-claro: #F4CFC3;
+  --cinza-medio: #606266;
+  --off-white: #FAF9F7;
+  --background-pattern: linear-gradient(135deg, var(--off-white) 25%, transparent 25%) -10px 0,
+                        linear-gradient(225deg, var(--off-white) 25%, transparent 25%) -10px 0,
+                        linear-gradient(315deg, var(--off-white) 25%, transparent 25%),
+                        linear-gradient(45deg, var(--off-white) 25%, transparent 25%);
+  --background-size: 20px 20px;
+  --background-color: #fff;
+}
+
+/* Estilos do Logo */
+.logo-circular {
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(57,119,123,0.10);
+  border: 3px solid var(--verde-petroleo);
+  background: #fff;
+}
+
+/* Estilos Gerais */
+body {
+  font-family: 'Inter', sans-serif;
+  color: var(--cinza-medio);
+  line-height: 1.6;
+  background: url('/static/images/PapelDeParedeCalazans.jpg') center center/cover no-repeat fixed;
+  min-height: 100vh;
+}
+
+a {
+  color: var(--verde-petroleo);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: var(--verde-petroleo-escuro);
+}
+
+/* Header links hover rosa */
+.navbar-nav .nav-link:hover, .navbar-nav .nav-link:focus {
+  color: var(--pessego-claro) !important;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+/* Títulos */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--verde-petroleo);
+  font-weight: 700;
+}
+
+/* Botões */
+.btn-primary {
+  background-color: var(--verde-petroleo);
+  border-color: var(--verde-petroleo);
+  color: #fff;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+}
+.btn-primary:hover, .btn-primary:focus {
+  background-color: var(--pessego-claro);
+  border-color: var(--pessego-claro);
+  color: var(--verde-petroleo-escuro);
+}
+
+.btn-outline-secondary {
+  border-color: var(--pessego-claro);
+  color: var(--verde-petroleo-escuro);
+}
+.btn-outline-secondary:hover, .btn-outline-secondary:focus {
+  background-color: var(--pessego-claro);
+  color: var(--verde-petroleo-escuro);
+}
+
+/* Layout */
+.min-h-screen {
+  min-height: 100vh;
+}
+
+.bg-calazans-primary {
+  background-color: var(--verde-petroleo);
+}
+
+.bg-calazans-dark {
+  background-color: var(--verde-petroleo-escuro);
+}
+
+.bg-calazans-light {
+  background-color: var(--off-white);
+}
+
+/* Navbar */
+.navbar-custom {
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.navbar-brand {
+  font-weight: bold;
+  color: var(--verde-petroleo);
+}
+
+.navbar-nav .nav-link {
+  color: var(--cinza-medio);
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover, .navbar-nav .nav-link:focus {
+  color: var(--pessego-claro) !important;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.navbar-nav .active > .nav-link, .navbar-nav .nav-link.active {
+  color: var(--verde-petroleo);
+}
+
+/* Hero Section */
+.hero {
+  padding: 80px 0;
+  position: relative;
+  background: linear-gradient(135deg, rgba(255,255,255,0.95) 60%, var(--pessego-claro) 100%);
+  text-align: center;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 400px;
+  height: 400px;
+  transform: translate(-50%, -50%);
+  background: url('../images/logo_oficial.jpeg') center center/contain no-repeat;
+  opacity: 0.08;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--verde-petroleo);
+  margin-bottom: 1.5rem;
+}
+
+.hero p {
+  font-size: 1.25rem;
+  color: var(--cinza-medio);
+  margin-bottom: 2.5rem;
+}
+
+/* Cards */
+.card {
+  transition: transform 0.3s, box-shadow 0.3s;
+  margin-bottom: 20px;
+  border-color: #eee;
+  background: rgba(255,255,255,0.92);
+  box-shadow: 0 4px 16px rgba(57,119,123,0.07);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+  font-weight: bold;
+  color: var(--verde-petroleo);
+}
+
+.card-img-top {
+  height: 200px;
+  object-fit: cover;
+}
+
+/* Features */
+.feature-item {
+  padding: 20px;
+  border-radius: 12px;
+  background-color: rgba(255,255,255,0.92);
+  box-shadow: 0 4px 16px rgba(57,119,123,0.07);
+  margin-bottom: 20px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.feature-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Testimonials */
+.testimonial {
+  padding: 20px;
+  background-color: rgba(255,255,255,0.92);
+  box-shadow: 0 4px 16px rgba(57,119,123,0.07);
+  border-radius: 12px;
+  margin-bottom: 20px;
+  transition: transform 0.3s;
+}
+
+.testimonial:hover {
+  transform: translateY(-5px);
+}
+
+.testimonial-text {
+  font-style: italic;
+  margin-bottom: 15px;
+  color: var(--cinza-medio);
+}
+
+.testimonial-author {
+  font-weight: bold;
+  color: var(--verde-petroleo);
+}
+
+/* Forms */
+.form-control:focus {
+  border-color: var(--verde-petroleo);
+  box-shadow: 0 0 0 0.25rem rgba(57, 119, 123, 0.25);
+}
+
+/* Footer */
+footer {
+  background-color: var(--verde-petroleo);
+  color: white;
+  padding: 40px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23FFFFFF' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  opacity: 0.1;
+}
+
+footer a {
+  color: #fff;
+  text-decoration: underline;
+  transition: color 0.3s ease;
+}
+
+footer a:hover {
+  color: var(--pessego-claro);
+}
+
+/* Admin */
+.admin-header {
+  background-color: rgba(255,255,255,0.92);
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(57,119,123,0.07);
+}
+
+.admin-table {
+  background-color: rgba(255,255,255,0.92);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(57,119,123,0.07);
+  overflow: hidden;
+}
+
+/* Animations */
+.animate-fade-in {
+  animation: fadeIn 1s ease-in;
+}
+
+.animate-fade-up {
+  animation: fadeUp 1s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Caixas principais (cards, feature, testimonial, etc) */
+.card, .feature-item, .testimonial, .admin-header, .admin-table, .bg-white, .bg-calazans-light {
+  background: rgba(255,255,255,0.92) !important;
+  box-shadow: 0 4px 16px rgba(57,119,123,0.07);
+  border-radius: 12px;
+  backdrop-filter: blur(1.5px);
+} 

@@ -1,0 +1,94 @@
+{% extends "layout.html" %}
+
+{% block title %}Consultoria Calazans - Recuperação Física{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h1 class="animate-fade-in">Recupere seu corpo com segurança</h1>
+                <p class="animate-fade-up">
+                    Treinos online personalizados para mães e mulheres com dor lombar ou lesões.
+                    Cuidados reais com quem entende suas limitações.
+                </p>
+                <a href="{{ url_for('main.contact') }}" class="btn btn-primary btn-lg animate-fade-up">
+                    Agendar sua consulta <i class="fas fa-arrow-right ms-2"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5 bg-white">
+    <div class="container">
+        <h2 class="text-center mb-5">Por que escolher a Consultoria Calazans?</h2>
+        
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="feature-item shadow-sm h-100">
+                    <h3 class="h5 mb-3">Atendimento Especializado</h3>
+                    <p class="text-muted mb-0">
+                        Foco exclusivo em reabilitação feminina, especialmente para mães e mulheres com lesões específicas.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="feature-item shadow-sm h-100">
+                    <h3 class="h5 mb-3">Treinamentos Personalizados</h3>
+                    <p class="text-muted mb-0">
+                        Cada plano de treino é desenvolvido considerando suas necessidades e limitações.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="feature-item shadow-sm h-100">
+                    <h3 class="h5 mb-3">Acompanhamento Contínuo</h3>
+                    <p class="text-muted mb-0">
+                        Suporte online para garantir sua evolução e ajustar o treinamento conforme seu progresso.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5 bg-calazans-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h2 class="mb-4">Pronta para iniciar sua recuperação?</h2>
+                <p class="lead mb-4">
+                    Dê o primeiro passo para uma vida mais saudável e livre de dores.
+                </p>
+                <a href="{{ url_for('main.contact') }}" class="btn btn-primary btn-lg">
+                    Quero recuperar meu corpo
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="py-5 bg-white">
+    <div class="container">
+        <h2 class="text-center mb-5">O que nossas alunas dizem</h2>
+        
+        <div class="row">
+            {% for testimonial in testimonials %}
+            <div class="col-md-4 mb-4">
+                <div class="testimonial h-100">
+                    <p class="testimonial-text">{{ testimonial.text }}</p>
+                    <p class="testimonial-author">{{ testimonial.name }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %} 

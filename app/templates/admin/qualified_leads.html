@@ -1,0 +1,167 @@
+{% extends "layout.html" %}
+
+{% block title %}Leads Qualificados - Admin{% endblock %}
+
+{% block extra_css %}
+<style>
+    .priority-high {
+        background-color: rgba(244, 207, 195, 0.3);
+        border-left: 4px solid #dc3545;
+    }
+    .priority-medium {
+        background-color: rgba(255, 243, 205, 0.3);
+        border-left: 4px solid #ffc107;
+    }
+    .priority-low {
+        background-color: rgba(209, 236, 241, 0.3);
+        border-left: 4px solid #0dcaf0;
+    }
+    .score-badge {
+        font-size: 0.8rem;
+        padding: 0.35em 0.65em;
+        border-radius: 50rem;
+    }
+    .badge-high {
+        background-color: #dc3545;
+        color: white;
+    }
+    .badge-medium {
+        background-color: #ffc107;
+        color: black;
+    }
+    .badge-low {
+        background-color: #0dcaf0;
+        color: white;
+    }
+    .reason-tag {
+        display: inline-block;
+        font-size: 0.75rem;
+        background-color: var(--off-white);
+        color: var(--cinza-medio);
+        padding: 0.2rem 0.5rem;
+        border-radius: 0.25rem;
+        margin-right: 0.25rem;
+        margin-bottom: 0.25rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Leads Qualificados</h1>
+        <a href="{{ url_for('admin.reports') }}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i> Voltar para Relatórios
+        </a>
+    </div>
+    
+    <div class="card mb-4">
+        <div class="card-header bg-calazans-light">
+            <h5 class="mb-0">Sistema de Qualificação de Leads</h5>
+        </div>
+        <div class="card-body">
+            <p class="mb-2">Nosso sistema qualifica automaticamente os leads com base em critérios relevantes para a Consultoria Calazans:</p>
+            <ul class="mb-0">
+                <li><strong>Alta Prioridade (6+ pontos):</strong> Leads com alta probabilidade de conversão, exigindo atenção imediata.</li>
+                <li><strong>Média Prioridade (3-5 pontos):</strong> Leads com potencial de conversão, merecendo acompanhamento.</li>
+                <li><strong>Baixa Prioridade (0-2 pontos):</strong> Leads com menor probabilidade de conversão imediata.</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5 class="mb-0">Leads Qualificados</h5>
+                </div>
+                <div class="col-md-8">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="searchLeads" placeholder="Buscar por nome, email ou fonte...">
+                        <button class="btn btn-outline-secondary" type="button" id="clearSearch">Limpar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0" id="qualifiedLeadsTable">
+                    <thead>
+                        <tr>
+                            <th>Pontuação</th>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>Telefone</th>
+                            <th>Fonte</th>
+                            <th>Data</th>
+                            <th>Assunto</th>
+                            <th>Motivos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for lead in qualified_leads %}
+                        <tr class="{% if lead.qualification == 'Alta prioridade' %}priority-high{% elif lead.qualification == 'Média prioridade' %}priority-medium{% else %}priority-low{% endif %}">
+                            <td>
+                                <span class="score-badge {% if lead.score >= 6 %}badge-high{% elif lead.score >= 3 %}badge-medium{% else %}badge-low{% endif %}">
+                                    {{ lead.score }}
+                                </span>
+                            </td>
+                            <td>{{ lead.name }}</td>
+                            <td>{{ lead.email }}</td>
+                            <td>{{ lead.phone }}</td>
+                            <td>{{ lead.source }}</td>
+                            <td>{{ lead.created_at }}</td>
+                            <td>{{ lead.issue }}</td>
+                            <td>
+                                {% for reason in lead.reasons %}
+                                <span class="reason-tag">{{ reason }}</span>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Busca na tabela
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchLeads');
+        const clearButton = document.getElementById('clearSearch');
+        const table = document.getElementById('qualifiedLeadsTable');
+        const rows = table.querySelectorAll('tbody tr');
+        
+        searchInput.addEventListener('keyup', function() {
+            const searchTerm = searchInput.value.toLowerCase();
+            
+            rows.forEach(row => {
+                const name = row.cells[1].textContent.toLowerCase();
+                const email = row.cells[2].textContent.toLowerCase();
+                const source = row.cells[4].textContent.toLowerCase();
+                const issue = row.cells[6].textContent.toLowerCase();
+                
+                if (name.includes(searchTerm) || 
+                    email.includes(searchTerm) || 
+                    source.includes(searchTerm) ||
+                    issue.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+        
+        clearButton.addEventListener('click', function() {
+            searchInput.value = '';
+            rows.forEach(row => {
+                row.style.display = '';
+            });
+        });
+    });
+</script>
+{% endblock %} 

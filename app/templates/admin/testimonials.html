@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+
+{% block title %}Consultoria Calazans - Gerenciamento de Depoimentos{% endblock %}
+
+{% block content %}
+<section class="py-4">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Gerenciamento de Depoimentos</h1>
+            <div>
+                <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-secondary me-2">Voltar ao Painel</a>
+                <a href="{{ url_for('admin.add_testimonial') }}" class="btn btn-primary">Adicionar Novo Depoimento</a>
+            </div>
+        </div>
+        
+        {% if testimonials %}
+        <div class="table-responsive admin-table">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Depoimento</th>
+                        <th>Data de Criação</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for testimonial in testimonials %}
+                    <tr>
+                        <td>{{ testimonial.id }}</td>
+                        <td>{{ testimonial.name }}</td>
+                        <td>{{ testimonial.text[:50] }}{% if testimonial.text|length > 50 %}...{% endif %}</td>
+                        <td>{{ testimonial.created_at }}</td>
+                        <td>
+                            <a href="{{ url_for('admin.edit_testimonial', id=testimonial.id) }}" class="btn btn-sm btn-outline-primary">Editar</a>
+                            <a href="{{ url_for('admin.delete_testimonial_route', id=testimonial.id) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Tem certeza que deseja excluir este depoimento?')">Excluir</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+            <p class="mb-0">Nenhum depoimento cadastrado. <a href="{{ url_for('admin.add_testimonial') }}">Adicionar um depoimento</a>.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %} 
