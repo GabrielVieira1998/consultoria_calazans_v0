@@ -16,6 +16,9 @@ Descubra como funciona o sistema automatizado de pontuação de leads, como inte
 ### 4. [Processo Otimizado de Atendimento](./04-PROCESSO_ATENDIMENTO_OTIMIZADO.md)
 Um framework completo para gerenciar o processo de atendimento ao cliente como profissional solo, desde o primeiro contato até a retenção.
 
+### 5. [Guia de Desenvolvimento](./guia_desenvolvimento.md)
+Guia técnico completo para desenvolvedores, incluindo instruções sobre como adicionar novas rotas, tabelas no banco de dados, implementar autenticação e criar CRUDs completos.
+
 ## Como utilizar estes tutoriais
 
 Recomendamos seguir estes passos para aproveitar ao máximo os tutoriais:
@@ -24,6 +27,7 @@ Recomendamos seguir estes passos para aproveitar ao máximo os tutoriais:
 2. Leia o **Guia de Links UTM** para melhorar o rastreamento de suas campanhas de marketing
 3. Estude o **Sistema de Pontuação de Leads** para priorizar seus contatos eficientemente
 4. Implemente o **Processo Otimizado de Atendimento** para maximizar seus resultados
+5. Consulte o **Guia de Desenvolvimento** quando precisar fazer alterações técnicas ou adicionar novas funcionalidades ao sistema
 
 Cada documento contém informações detalhadas, exemplos práticos e dicas específicas para a realidade da Consultoria Calazans.
 
