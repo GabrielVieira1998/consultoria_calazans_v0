@@ -131,8 +131,11 @@
             <div class="row mb-4">
                 <div class="col-md-8">
                     <div class="card dashboard-card">
-                        <div class="card-header">
+                        <div class="card-header bg-white">
                             <h5 class="mb-0">Leads por Mês</h5>
+                            <p class="text-muted mb-0 small">
+                                Gráfico mostrando a evolução de leads mensalmente.
+                            </p>
                         </div>
                         <div class="card-body">
                             <div class="chart-container">
@@ -143,8 +146,11 @@
                 </div>
                 <div class="col-md-4">
                     <div class="card dashboard-card">
-                        <div class="card-header">
+                        <div class="card-header bg-white">
                             <h5 class="mb-0">Leads por Fonte</h5>
+                            <p class="text-muted mb-0 small">
+                                Distribuição de leads por origem de tráfego.
+                            </p>
                         </div>
                         <div class="card-body">
                             <div class="chart-container">
@@ -158,8 +164,11 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="card dashboard-card">
-                        <div class="card-header">
+                        <div class="card-header bg-white">
                             <h5 class="mb-0">Leads por Campanha</h5>
+                            <p class="text-muted mb-0 small">
+                                Efetividade de cada campanha de marketing.
+                            </p>
                         </div>
                         <div class="card-body">
                             <div class="chart-container">
@@ -170,8 +179,13 @@
                 </div>
                 <div class="col-md-6">
                     <div class="card dashboard-card">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0">Leads Recentes</h5>
+                        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="mb-0">Leads Recentes</h5>
+                                <p class="text-muted mb-0 small">
+                                    Últimos leads recebidos no sistema.
+                                </p>
+                            </div>
                             <a href="{{ url_for('admin.qualified_leads') }}" class="btn btn-sm btn-outline-primary">Ver todos</a>
                         </div>
                         <div class="card-body">
@@ -204,8 +218,11 @@
         <!-- Aba Tabela de Leads -->
         <div class="tab-pane fade" id="leads-table">
             <div class="card">
-                <div class="card-header">
+                <div class="card-header bg-white">
                     <h5 class="mb-0">Detalhes dos Leads</h5>
+                    <p class="text-muted mb-0 small">
+                        Tabela completa com informações detalhadas de todos os leads.
+                    </p>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -241,8 +258,11 @@
         <!-- Aba Análise de Fontes -->
         <div class="tab-pane fade" id="source-analysis">
             <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">Leads por Fonte</h5>
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Análise por Fonte</h5>
+                    <p class="text-muted mb-0 small">
+                        Estatísticas detalhadas de leads agrupados por fonte de origem.
+                    </p>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">

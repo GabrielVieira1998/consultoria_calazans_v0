@@ -17,8 +17,11 @@
             <div class="col-lg-8">
                 <!-- Detalhes do Link -->
                 <div class="card mb-4">
-                    <div class="card-header bg-light">
+                    <div class="card-header bg-white">
                         <h5 class="mb-0">{{ utm_link.name }}</h5>
+                        <p class="text-muted mb-0 small">
+                            Detalhes e configurações do link UTM.
+                        </p>
                     </div>
                     <div class="card-body">
                         <p class="card-text">{{ utm_link.short_description }}</p>
@@ -106,8 +109,11 @@
             <div class="col-lg-4">
                 <!-- URL Gerada -->
                 <div class="card mb-4">
-                    <div class="card-header bg-primary text-white">
+                    <div class="card-header bg-white">
                         <h5 class="mb-0">URL Gerada</h5>
+                        <p class="text-muted mb-0 small">
+                            URL completa com parâmetros UTM para uso em campanhas.
+                        </p>
                     </div>
                     <div class="card-body">
                         <div class="mb-3">
@@ -123,7 +129,7 @@
                         </div>
                         
                         <div class="d-grid gap-2">
-                            <a href="{{ full_url }}" target="_blank" class="btn btn-primary">
+                            <a href="{{ full_url }}" target="_blank" class="btn btn-calazans-primary text-white">
                                 <i class="fas fa-external-link-alt"></i> Abrir URL
                             </a>
                         </div>
@@ -132,13 +138,16 @@
                 
                 <!-- QR Code -->
                 <div class="card mb-4">
-                    <div class="card-header bg-light">
+                    <div class="card-header bg-white">
                         <h5 class="mb-0">QR Code</h5>
+                        <p class="text-muted mb-0 small">
+                            Código QR para compartilhamento rápido do link.
+                        </p>
                     </div>
                     <div class="card-body text-center">
                         <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ full_url|urlencode }}" alt="QR Code" class="img-fluid mb-3">
                         <div class="d-grid gap-2">
-                            <a href="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data={{ full_url|urlencode }}" download="qrcode.png" class="btn btn-outline-primary">
+                            <a href="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data={{ full_url|urlencode }}" download="qrcode.png" class="btn btn-outline-secondary">
                                 <i class="fas fa-download"></i> Baixar QR Code
                             </a>
                         </div>

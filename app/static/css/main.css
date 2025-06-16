@@ -69,6 +69,18 @@ h1, h2, h3, h4, h5, h6 {
   color: #fff;
 }
 
+.btn-calazans-primary {
+  background-color: var(--laranja-vibrante);
+  border-color: var(--laranja-vibrante);
+  color: #fff;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+}
+.btn-calazans-primary:hover, .btn-calazans-primary:focus {
+  background-color: var(--laranja-medio);
+  border-color: var(--laranja-medio);
+  color: #fff;
+}
+
 .btn-outline-secondary {
   border-color: var(--laranja-claro);
   color: var(--vermelho-escuro);
@@ -76,6 +88,17 @@ h1, h2, h3, h4, h5, h6 {
 .btn-outline-secondary:hover, .btn-outline-secondary:focus {
   background-color: var(--laranja-claro);
   color: var(--vermelho-escuro);
+}
+
+.btn-outline-calazans {
+  border-color: var(--laranja-vibrante);
+  color: var(--laranja-vibrante);
+  background-color: transparent;
+}
+.btn-outline-calazans:hover, .btn-outline-calazans:focus {
+  background-color: var(--laranja-vibrante);
+  border-color: var(--laranja-vibrante);
+  color: white;
 }
 
 /* Layout */
@@ -89,6 +112,11 @@ h1, h2, h3, h4, h5, h6 {
 
 .bg-calazans-dark {
   background-color: var(--vinho-profundo);
+}
+
+.badge-calazans {
+  background-color: var(--vermelho-escuro) !important;
+  color: white !important;
 }
 
 .bg-calazans-light {

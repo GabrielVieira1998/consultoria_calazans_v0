@@ -9,7 +9,10 @@
             <div class="col-lg-8">
                 <div class="card">
                     <div class="card-header bg-white">
-                        <h1 class="h4 mb-0">{{ 'Editar' if testimonial else 'Adicionar' }} Depoimento</h1>
+                        <h4 class="mb-0">{{ 'Editar' if testimonial else 'Adicionar' }} Depoimento</h4>
+                        <p class="text-muted mb-0 small">
+                            {{ 'Edite' if testimonial else 'Adicione' }} um depoimento de cliente para exibir no site.
+                        </p>
                     </div>
                     <div class="card-body">
                         <form method="post" action="{{ url_for('admin.edit_testimonial', id=testimonial.id) if testimonial else url_for('admin.add_testimonial') }}" class="needs-validation" novalidate>

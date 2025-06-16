@@ -13,9 +13,13 @@
         <div class="row mb-4">
             <div class="col-md-4 mb-4">
                 <div class="card h-100">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">Gerenciamento de Depoimentos</h5>
+                        <p class="text-muted mb-0 small">
+                            Adicione, edite e remova depoimentos de clientes.
+                        </p>
+                    </div>
                     <div class="card-body">
-                        <h5 class="card-title">Gerenciamento de Depoimentos</h5>
-                        <p class="card-text">Adicione, edite e remova depoimentos de clientes.</p>
                         <a href="{{ url_for('admin.testimonials') }}" class="btn btn-primary">Gerenciar Depoimentos</a>
                     </div>
                 </div>
@@ -23,9 +27,13 @@
             
             <div class="col-md-4 mb-4">
                 <div class="card h-100">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">Links UTM</h5>
+                        <p class="text-muted mb-0 small">
+                            Gerencie links UTM para suas campanhas de marketing.
+                        </p>
+                    </div>
                     <div class="card-body">
-                        <h5 class="card-title">Links UTM</h5>
-                        <p class="card-text">Gerencie links UTM para suas campanhas de marketing.</p>
                         <a href="{{ url_for('admin.utm_links') }}" class="btn btn-primary">Gerenciar Links UTM</a>
                     </div>
                 </div>
@@ -33,18 +41,27 @@
             
             <div class="col-md-4 mb-4">
                 <div class="card h-100">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">Relatórios de Leads</h5>
+                        <p class="text-muted mb-0 small">
+                            Visualize estatísticas e informações sobre seus leads e campanhas.
+                        </p>
+                    </div>
                     <div class="card-body">
-                        <h5 class="card-title">Relatórios de Leads</h5>
-                        <p class="card-text">Visualize estatísticas e informações sobre seus leads e campanhas.</p>
                         <a href="{{ url_for('admin.reports') }}" class="btn btn-primary">Ver Relatórios</a>
                     </div>
                 </div>
             </div>
         </div>
         
-        <div class="card bg-calazans-light mb-4">
+        <div class="card mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Dica de Marketing</h5>
+                <p class="text-muted mb-0 small">
+                    Aproveite ao máximo as ferramentas disponíveis no painel.
+                </p>
+            </div>
             <div class="card-body">
-                <h5 class="card-title">Dica de Marketing</h5>
                 <p class="card-text">Use links UTM para rastrear a eficácia de suas campanhas. Acompanhe os resultados na seção de relatórios.</p>
             </div>
         </div>
