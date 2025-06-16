@@ -30,7 +30,15 @@
                         </p>
                     </div>
                     <div class="card-body">
-                        <form method="post" action="{{ url_for('main.contact') }}">
+                        <form method="post" action="{{ url_for('main.contact') }}" id="contactForm">
+                            <!-- Campos hidden para parâmetros UTM -->
+                            <input type="hidden" name="utm_source" id="utm_source" value="">
+                            <input type="hidden" name="utm_medium" id="utm_medium" value="">
+                            <input type="hidden" name="utm_campaign" id="utm_campaign" value="">
+                            <input type="hidden" name="utm_term" id="utm_term" value="">
+                            <input type="hidden" name="utm_content" id="utm_content" value="">
+                            <input type="hidden" name="source" id="source" value="">
+                            
                             <div class="mb-3">
                                 <label for="name" class="form-label">Nome Completo</label>
                                 <input type="text" class="form-control" id="name" name="name" placeholder="Seu nome completo" required>
@@ -87,4 +95,54 @@
         </div>
     </div>
 </section>
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Função para extrair parâmetros UTM da URL
+    function getURLParameter(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name) || '';
+    }
+    
+    // Função para detectar fonte baseada no referrer e UTM
+    function detectSource() {
+        const referrer = document.referrer.toLowerCase();
+        
+        // Primeiro, verificar se há utm_source
+        const utmSource = getURLParameter('utm_source');
+        if (utmSource) return utmSource;
+        
+        // Se não há utm_source, detectar pelo referrer
+        if (referrer.includes('instagram.com')) return 'instagram';
+        if (referrer.includes('facebook.com')) return 'facebook';
+        if (referrer.includes('google.com')) return 'google';
+        if (referrer.includes('whatsapp')) return 'whatsapp';
+        if (referrer.includes('t.co')) return 'twitter';
+        if (referrer.includes('linkedin.com')) return 'linkedin';
+        
+        return 'direct';
+    }
+    
+    // Capturar e preencher os campos hidden
+    document.getElementById('utm_source').value = getURLParameter('utm_source');
+    document.getElementById('utm_medium').value = getURLParameter('utm_medium');
+    document.getElementById('utm_campaign').value = getURLParameter('utm_campaign');
+    document.getElementById('utm_term').value = getURLParameter('utm_term');
+    document.getElementById('utm_content').value = getURLParameter('utm_content');
+    document.getElementById('source').value = detectSource();
+    
+    // Debug: exibir os valores capturados no console (útil para diagnóstico)
+    console.log('UTM Parameters captured:', {
+        utm_source: getURLParameter('utm_source'),
+        utm_medium: getURLParameter('utm_medium'),
+        utm_campaign: getURLParameter('utm_campaign'),
+        utm_term: getURLParameter('utm_term'),
+        utm_content: getURLParameter('utm_content'),
+        source: detectSource()
+    });
+});
+</script>
+{% endblock %}
+
 {% endblock %} 

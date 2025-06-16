@@ -30,13 +30,13 @@ def contact():
         issue = request.form['issue']
         message = request.form['message']
         
-        # Captura parâmetros UTM e fonte
-        utm_source = g.utm_params['utm_source']
-        utm_medium = g.utm_params['utm_medium']
-        utm_campaign = g.utm_params['utm_campaign']
-        utm_term = g.utm_params['utm_term']
-        utm_content = g.utm_params['utm_content']
-        source = g.source
+        # Captura parâmetros UTM e fonte via POST (campos hidden do JavaScript)
+        utm_source = request.form.get('utm_source', '')
+        utm_medium = request.form.get('utm_medium', '')
+        utm_campaign = request.form.get('utm_campaign', '')
+        utm_term = request.form.get('utm_term', '')
+        utm_content = request.form.get('utm_content', '')
+        source = request.form.get('source', 'direct')
         
         save_contact(name, email, phone, issue, message, 
                      source, utm_source, utm_medium, utm_campaign, 
