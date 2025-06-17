@@ -38,11 +38,35 @@
                             <tr>
                                 <td>{{ testimonial.id }}</td>
                                 <td>{{ testimonial.name }}</td>
-                                <td>{{ testimonial.text[:50] }}{% if testimonial.text|length > 50 %}...{% endif %}</td>
+                                <td>
+                                    <span title="{{ testimonial.text }}">
+                                        {{ testimonial.text[:50] }}{% if testimonial.text|length > 50 %}...{% endif %}
+                                    </span>
+                                </td>
                                 <td>{{ testimonial.created_at }}</td>
                                 <td>
-                                    <a href="{{ url_for('admin.edit_testimonial', id=testimonial.id) }}" class="btn btn-sm btn-outline-primary">Editar</a>
-                                    <a href="{{ url_for('admin.delete_testimonial_route', id=testimonial.id) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Tem certeza que deseja excluir este depoimento?')">Excluir</a>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button type="button" 
+                                                class="btn btn-outline-primary" 
+                                                title="Visualizar depoimento completo"
+                                                data-name="{{ testimonial.name }}"
+                                                data-text="{{ testimonial.text }}"
+                                                data-date="{{ testimonial.created_at }}"
+                                                onclick="showTestimonialModal(this)">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <a href="{{ url_for('admin.edit_testimonial', id=testimonial.id) }}" 
+                                           class="btn btn-outline-warning" 
+                                           title="Editar depoimento">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button type="button" 
+                                                class="btn btn-outline-danger" 
+                                                title="Excluir depoimento"
+                                                onclick="confirmDeleteTestimonial({{ testimonial.id }}, '{{ testimonial.name }}')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                             {% endfor %}
@@ -58,4 +82,58 @@
         {% endif %}
     </div>
 </section>
+
+<!-- Modal para visualizar depoimento completo -->
+<div class="modal fade" id="testimonialModal" tabindex="-1" aria-labelledby="testimonialModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="testimonialModalLabel">Depoimento Completo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Nome:</label>
+                    <p id="modalTestimonialName"></p>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Data de Criação:</label>
+                    <p id="modalTestimonialDate"></p>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Depoimento:</label>
+                    <p id="modalTestimonialText" style="white-space: pre-wrap;"></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Função para mostrar modal com depoimento completo
+    function showTestimonialModal(button) {
+        const name = button.getAttribute('data-name');
+        const text = button.getAttribute('data-text');
+        const date = button.getAttribute('data-date');
+        
+        document.getElementById('modalTestimonialName').textContent = name;
+        document.getElementById('modalTestimonialText').textContent = text;
+        document.getElementById('modalTestimonialDate').textContent = date;
+        
+        const modal = new bootstrap.Modal(document.getElementById('testimonialModal'));
+        modal.show();
+    }
+
+    // Função para confirmar exclusão de depoimento
+    function confirmDeleteTestimonial(testimonialId, testimonialName) {
+        if (confirm(`Tem certeza que deseja excluir o depoimento de "${testimonialName}"? Esta ação não pode ser desfeita.`)) {
+            window.location.href = `/admin/depoimentos/excluir/${testimonialId}`;
+        }
+    }
+</script>
 {% endblock %} 
