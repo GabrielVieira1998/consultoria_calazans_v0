@@ -3,16 +3,92 @@ from datetime import datetime, timedelta
 import json
 
 def save_contact(name, email, phone, issue, message, source, utm_source, utm_medium, utm_campaign, utm_term, utm_content):
-    conn = get_db()
-    conn.execute('''
-        INSERT INTO contacts (name, email, phone, issue, message, 
-                            source, utm_source, utm_medium, utm_campaign, 
-                            utm_term, utm_content)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    ''', (name, email, phone, issue, message, 
-          source, utm_source, utm_medium, utm_campaign, 
-          utm_term, utm_content))
-    conn.commit()
+    db = get_db()
+    db.execute(
+        'INSERT INTO contacts (name, email, phone, issue, message, source, utm_source, utm_medium, utm_campaign, utm_term, utm_content) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        (name, email, phone, issue, message, source, utm_source, utm_medium, utm_campaign, utm_term, utm_content)
+    )
+    db.commit()
+
+def get_lead_by_id(lead_id):
+    """Busca um lead específico pelo ID"""
+    db = get_db()
+    lead = db.execute('''
+        SELECT 
+            id, name, email, phone, issue, message,
+            source, utm_source, utm_medium, utm_campaign, utm_term, utm_content,
+            strftime('%d/%m/%Y %H:%M', created_at) as formatted_created_at,
+            created_at
+        FROM contacts 
+        WHERE id = ?
+    ''', (lead_id,)).fetchone()
+    return lead
+
+def update_lead(lead_id, name, email, phone, issue, message, source, utm_source, utm_medium, utm_campaign, utm_term, utm_content):
+    """Atualiza um lead existente"""
+    try:
+        db = get_db()
+        
+        # Sincronizar fonte: UTM Source tem prioridade sobre Fonte manual
+        final_source = utm_source if utm_source and utm_source.strip() else source
+        
+        # Debug: log dos dados antes da atualização
+        print(f"Atualizando lead ID {lead_id}:")
+        print(f"  Nome: {name}")
+        print(f"  Email: {email}")
+        print(f"  Telefone: {phone}")
+        print(f"  Assunto: {issue}")
+        print(f"  Fonte original: {source}")
+        print(f"  UTM Source: {utm_source}")
+        print(f"  Fonte final (sincronizada): {final_source}")
+        print(f"  UTM Campaign: {utm_campaign}")
+        
+        cursor = db.execute('''
+            UPDATE contacts 
+            SET name = ?, email = ?, phone = ?, issue = ?, message = ?,
+                source = ?, utm_source = ?, utm_medium = ?, utm_campaign = ?, utm_term = ?, utm_content = ?
+            WHERE id = ?
+        ''', (name, email, phone, issue, message, final_source, utm_source, utm_medium, utm_campaign, utm_term, utm_content, lead_id))
+        
+        rows_affected = cursor.rowcount
+        print(f"Linhas afetadas na atualização: {rows_affected}")
+        
+        db.commit()
+        
+        # Verificar se a atualização foi bem-sucedida
+        updated_lead = db.execute('''
+            SELECT name, email, phone, issue, source, utm_source, utm_campaign
+            FROM contacts WHERE id = ?
+        ''', (lead_id,)).fetchone()
+        
+        if updated_lead:
+            print(f"Dados após atualização: {dict(updated_lead)}")
+        else:
+            print(f"ERRO: Lead {lead_id} não encontrado após atualização!")
+            
+    except Exception as e:
+        print(f"ERRO na função update_lead: {str(e)}")
+        raise e
+
+def delete_lead(lead_id):
+    """Exclui um lead"""
+    db = get_db()
+    db.execute('DELETE FROM contacts WHERE id = ?', (lead_id,))
+    db.commit()
+
+def get_all_leads_with_details():
+    """Busca todos os leads com informações completas para a tabela do admin"""
+    db = get_db()
+    leads = db.execute('''
+        SELECT 
+            id, name, email, phone, issue, message,
+            source, utm_source, utm_medium, utm_campaign, utm_term, utm_content,
+            strftime('%d/%m/%Y %H:%M', created_at) as formatted_created_at,
+            created_at
+        FROM contacts 
+        ORDER BY created_at DESC
+    ''').fetchall()
+    return leads
 
 def get_lead_sources():
     db = get_db()
@@ -20,10 +96,9 @@ def get_lead_sources():
         SELECT 
             source,
             COUNT(*) as total,
-            SUM(CASE 
+            COUNT(CASE 
                 WHEN created_at >= datetime('now', '-30 days') 
                 THEN 1 
-                ELSE 0 
             END) as last_30_days
         FROM contacts 
         GROUP BY source
@@ -45,7 +120,7 @@ def get_lead_details():
         ORDER BY created_at DESC
         LIMIT 100
     ''').fetchall()
-    return leads 
+    return leads
 
 def get_dashboard_data():
     """Gera dados para o dashboard, incluindo estatísticas de leads e conversão"""

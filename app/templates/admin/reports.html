@@ -219,33 +219,60 @@
         <div class="tab-pane fade" id="leads-table">
             <div class="card">
                 <div class="card-header bg-white">
-                    <h5 class="mb-0">Detalhes dos Leads</h5>
+                    <h5 class="mb-0">Gerenciamento de Leads</h5>
                     <p class="text-muted mb-0 small">
-                        Tabela completa com informações detalhadas de todos os leads.
+                        Tabela completa com informações detalhadas de todos os leads. Você pode visualizar, editar ou excluir leads conforme necessário.
                     </p>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table">
+                        <table class="table table-hover">
                             <thead>
                                 <tr>
+                                    <th>ID</th>
                                     <th>Data</th>
                                     <th>Nome</th>
                                     <th>Email</th>
+                                    <th>Telefone</th>
+                                    <th>Assunto</th>
                                     <th>Fonte</th>
                                     <th>Campanha</th>
-                                    <th>Mídia</th>
+                                    <th>Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for lead in leads %}
                                 <tr>
-                                    <td>{{ lead.created_at }}</td>
+                                    <td>{{ lead.id }}</td>
+                                    <td>{{ lead.formatted_created_at }}</td>
                                     <td>{{ lead.name }}</td>
                                     <td>{{ lead.email }}</td>
+                                    <td>{{ lead.phone }}</td>
+                                    <td>
+                                        <span class="badge bg-secondary">{{ lead.issue }}</span>
+                                    </td>
                                     <td>{{ lead.source or 'Direto' }}</td>
                                     <td>{{ lead.utm_campaign or '-' }}</td>
-                                    <td>{{ lead.utm_medium or '-' }}</td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm" role="group">
+                                            <a href="{{ url_for('admin.view_lead', lead_id=lead.id) }}" 
+                                               class="btn btn-outline-primary" 
+                                               title="Visualizar detalhes">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a href="{{ url_for('admin.edit_lead', lead_id=lead.id) }}" 
+                                               class="btn btn-outline-warning" 
+                                               title="Editar lead">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <button type="button" 
+                                                    class="btn btn-outline-danger" 
+                                                    title="Excluir lead"
+                                                    onclick="confirmDelete({{ lead.id }}, '{{ lead.name }}')">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -411,5 +438,28 @@
             }
         }
     );
+    
+    // Função para confirmar exclusão de lead
+    function confirmDelete(leadId, leadName) {
+        if (confirm(`Tem certeza que deseja excluir o lead "${leadName}"? Esta ação não pode ser desfeita.`)) {
+            // Criar formulário para enviar POST request
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = `/admin/leads/${leadId}/excluir`;
+            
+            // Adicionar token CSRF se necessário
+            const csrfToken = document.querySelector('meta[name=csrf-token]');
+            if (csrfToken) {
+                const csrfInput = document.createElement('input');
+                csrfInput.type = 'hidden';
+                csrfInput.name = 'csrf_token';
+                csrfInput.value = csrfToken.getAttribute('content');
+                form.appendChild(csrfInput);
+            }
+            
+            document.body.appendChild(form);
+            form.submit();
+        }
+    }
 </script>
 {% endblock %} 

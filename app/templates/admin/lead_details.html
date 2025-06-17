@@ -1,0 +1,217 @@
+{% extends "layout.html" %}
+
+{% block title %}Detalhes do Lead - Admin{% endblock %}
+
+{% block extra_css %}
+<style>
+    .lead-card {
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+    .detail-label {
+        font-weight: 600;
+        color: var(--cinza-medio);
+        font-size: 0.9rem;
+    }
+    .detail-value {
+        color: var(--cinza-escuro);
+        margin-bottom: 1rem;
+    }
+    .utm-section {
+        background-color: var(--bege-claro);
+        border-radius: 8px;
+        padding: 1rem;
+        margin-top: 1rem;
+    }
+    .message-content {
+        background-color: #f8f9fa;
+        border-left: 4px solid var(--laranja-vibrante);
+        padding: 1rem;
+        border-radius: 0 8px 8px 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+        <h1>Detalhes do Lead</h1>
+        <div class="mt-2 mt-md-0">
+            <a href="{{ url_for('admin.reports') }}" class="btn btn-outline-secondary me-2 mb-2 mb-md-0">
+                <i class="fas fa-arrow-left me-1"></i> Voltar aos Relatórios
+            </a>
+            <a href="{{ url_for('admin.edit_lead', lead_id=lead.id) }}" class="btn btn-warning me-2">
+                <i class="fas fa-edit me-1"></i> Editar Lead
+            </a>
+            <button type="button" class="btn btn-danger" onclick="confirmDelete({{ lead.id }}, '{{ lead.name }}')">
+                <i class="fas fa-trash me-1"></i> Excluir Lead
+            </button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card lead-card mb-4">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Informações Pessoais</h5>
+                    <p class="text-muted mb-0 small">Dados de contato fornecidos pelo lead.</p>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="detail-label">Nome Completo</div>
+                            <div class="detail-value">{{ lead.name }}</div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="detail-label">Email</div>
+                            <div class="detail-value">
+                                <a href="mailto:{{ lead.email }}">{{ lead.email }}</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="detail-label">Telefone</div>
+                            <div class="detail-value">
+                                <a href="tel:{{ lead.phone }}">{{ lead.phone }}</a>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="detail-label">Data de Contato</div>
+                            <div class="detail-value">{{ lead.formatted_created_at }}</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="detail-label">Assunto Principal</div>
+                            <div class="detail-value">
+                                <span class="badge bg-secondary">{{ lead.issue }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card lead-card mb-4">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Mensagem</h5>
+                    <p class="text-muted mb-0 small">Conteúdo da mensagem enviada pelo lead.</p>
+                </div>
+                <div class="card-body">
+                    <div class="message-content">
+                        {{ lead.message|replace('\n', '<br>')|safe }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card lead-card mb-4">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Origem do Lead</h5>
+                    <p class="text-muted mb-0 small">Informações de rastreamento e origem.</p>
+                </div>
+                <div class="card-body">
+                    <div class="detail-label">Fonte Principal</div>
+                    <div class="detail-value">
+                        <span class="badge bg-primary">{{ lead.source or 'Direto' }}</span>
+                        {% if lead.utm_source and lead.utm_source != lead.source %}
+                        <br><small class="text-muted">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Baseada no UTM Source: {{ lead.utm_source }}
+                        </small>
+                        {% endif %}
+                    </div>
+
+                    {% if lead.utm_source or lead.utm_medium or lead.utm_campaign or lead.utm_term or lead.utm_content %}
+                    <div class="utm-section">
+                        <h6 class="mb-3">Parâmetros UTM</h6>
+                        
+                        {% if lead.utm_source %}
+                        <div class="detail-label">Fonte UTM</div>
+                        <div class="detail-value">{{ lead.utm_source }}</div>
+                        {% endif %}
+
+                        {% if lead.utm_medium %}
+                        <div class="detail-label">Mídia UTM</div>
+                        <div class="detail-value">{{ lead.utm_medium }}</div>
+                        {% endif %}
+
+                        {% if lead.utm_campaign %}
+                        <div class="detail-label">Campanha UTM</div>
+                        <div class="detail-value">{{ lead.utm_campaign }}</div>
+                        {% endif %}
+
+                        {% if lead.utm_term %}
+                        <div class="detail-label">Termo UTM</div>
+                        <div class="detail-value">{{ lead.utm_term }}</div>
+                        {% endif %}
+
+                        {% if lead.utm_content %}
+                        <div class="detail-label">Conteúdo UTM</div>
+                        <div class="detail-value">{{ lead.utm_content }}</div>
+                        {% endif %}
+                    </div>
+                    {% else %}
+                    <div class="text-muted">
+                        <small><i class="fas fa-info-circle me-1"></i> Nenhum parâmetro UTM detectado</small>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="card lead-card">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Ações Rápidas</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="mailto:{{ lead.email }}" class="btn btn-outline-primary">
+                            <i class="fas fa-envelope me-1"></i> Enviar Email
+                        </a>
+                        <a href="tel:{{ lead.phone }}" class="btn btn-outline-success">
+                            <i class="fas fa-phone me-1"></i> Ligar
+                        </a>
+                        <a href="https://wa.me/55{{ lead.phone|replace('(', '')|replace(')', '')|replace(' ', '')|replace('-', '') }}" 
+                           target="_blank" 
+                           class="btn btn-outline-success">
+                            <i class="fab fa-whatsapp me-1"></i> WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmação para exclusão -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirmar Exclusão</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja excluir o lead <strong>{{ lead.name }}</strong>?</p>
+                <p class="text-danger"><small><i class="fas fa-exclamation-triangle me-1"></i> Esta ação não pode ser desfeita.</small></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <form method="POST" action="{{ url_for('admin.delete_lead_route', lead_id=lead.id) }}" style="display: inline;">
+                    <button type="submit" class="btn btn-danger">Excluir Lead</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function confirmDelete(leadId, leadName) {
+        const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+        deleteModal.show();
+    }
+</script>
+{% endblock %} 

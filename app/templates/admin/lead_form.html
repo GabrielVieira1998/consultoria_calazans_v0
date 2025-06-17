@@ -1,0 +1,302 @@
+{% extends "layout.html" %}
+
+{% block title %}Editar Lead - Admin{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-card {
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+    .utm-section {
+        background-color: var(--bege-claro);
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-top: 1rem;
+    }
+    .form-label {
+        font-weight: 600;
+        color: var(--cinza-medio);
+    }
+    .required {
+        color: var(--laranja-vibrante);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+        <h1>Editar Lead</h1>
+        <div class="mt-2 mt-md-0">
+            <a href="{{ url_for('admin.view_lead', lead_id=lead.id) }}" class="btn btn-outline-secondary me-2 mb-2 mb-md-0">
+                <i class="fas fa-arrow-left me-1"></i> Voltar aos Detalhes
+            </a>
+            <a href="{{ url_for('admin.reports') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-chart-bar me-1"></i> Ir para Relatórios
+            </a>
+        </div>
+    </div>
+
+    <form method="POST" class="needs-validation" novalidate>
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card form-card mb-4">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">Informações Pessoais</h5>
+                        <p class="text-muted mb-0 small">Dados de contato do lead.</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="name" class="form-label">
+                                    Nome Completo <span class="required">*</span>
+                                </label>
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="name" 
+                                       name="name" 
+                                       value="{{ lead.name }}" 
+                                       required>
+                                <div class="invalid-feedback">
+                                    Por favor, informe o nome completo.
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">
+                                    Email <span class="required">*</span>
+                                </label>
+                                <input type="email" 
+                                       class="form-control" 
+                                       id="email" 
+                                       name="email" 
+                                       value="{{ lead.email }}" 
+                                       required>
+                                <div class="invalid-feedback">
+                                    Por favor, informe um email válido.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="phone" class="form-label">
+                                    Telefone <span class="required">*</span>
+                                </label>
+                                <input type="tel" 
+                                       class="form-control" 
+                                       id="phone" 
+                                       name="phone" 
+                                       value="{{ lead.phone }}" 
+                                       required>
+                                <div class="invalid-feedback">
+                                    Por favor, informe o telefone.
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="issue" class="form-label">
+                                    Assunto Principal <span class="required">*</span>
+                                </label>
+                                <select class="form-select" id="issue" name="issue" required>
+                                    <option value="">Selecione o assunto</option>
+                                    <option value="dores_posturais" {{ 'selected' if lead.issue == 'dores_posturais' }}>Dores Posturais</option>
+                                    <option value="pos_parto" {{ 'selected' if lead.issue == 'pos_parto' }}>Recuperação Pós-parto</option>
+                                    <option value="lesao" {{ 'selected' if lead.issue == 'lesao' }}>Recuperação de Lesão</option>
+                                    <option value="objetivos_esteticos" {{ 'selected' if lead.issue == 'objetivos_esteticos' }}>Objetivos Estéticos</option>
+                                    <option value="diastase" {{ 'selected' if lead.issue == 'diastase' }}>Diástase</option>
+                                    <option value="outro" {{ 'selected' if lead.issue == 'outro' }}>Outro</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Por favor, selecione o assunto.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="message" class="form-label">
+                                Mensagem <span class="required">*</span>
+                            </label>
+                            <textarea class="form-control" 
+                                      id="message" 
+                                      name="message" 
+                                      rows="5" 
+                                      required>{{ lead.message }}</textarea>
+                            <div class="invalid-feedback">
+                                Por favor, informe a mensagem.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card form-card mb-4">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">Origem e Rastreamento</h5>
+                        <p class="text-muted mb-0 small">Informações de fonte e UTM.</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="source" class="form-label">
+                                Fonte 
+                                <small class="text-muted">(Detectada automaticamente)</small>
+                            </label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="source" 
+                                   name="source" 
+                                   value="{{ lead.source or '' }}" 
+                                   placeholder="ex: instagram, google, facebook"
+                                   readonly>
+                            <div class="form-text">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Este campo é sincronizado automaticamente com o <strong>UTM Source</strong>. 
+                                Se você quiser alterar a fonte, edite o campo <strong>UTM Source</strong> abaixo.
+                            </div>
+                        </div>
+
+                        <div class="utm-section">
+                            <h6 class="mb-3">
+                                Parâmetros UTM 
+                                <small class="text-muted">(Estes campos têm prioridade)</small>
+                            </h6>
+                            
+                            <div class="mb-3">
+                                <label for="utm_source" class="form-label">
+                                    UTM Source 
+                                    <span class="text-danger">*</span>
+                                    <small class="text-muted">(Campo principal para fonte)</small>
+                                </label>
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="utm_source" 
+                                       name="utm_source" 
+                                       value="{{ lead.utm_source or '' }}" 
+                                       placeholder="ex: google, facebook, instagram, whatsapp">
+                                <div class="form-text">
+                                    <strong>Importante:</strong> Este valor será usado como fonte principal do lead.
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="utm_medium" class="form-label">UTM Medium</label>
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="utm_medium" 
+                                       name="utm_medium" 
+                                       value="{{ lead.utm_medium or '' }}" 
+                                       placeholder="ex: social, email, cpc">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="utm_campaign" class="form-label">UTM Campaign</label>
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="utm_campaign" 
+                                       name="utm_campaign" 
+                                       value="{{ lead.utm_campaign or '' }}" 
+                                       placeholder="ex: summer_promo">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="utm_term" class="form-label">UTM Term</label>
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="utm_term" 
+                                       name="utm_term" 
+                                       value="{{ lead.utm_term or '' }}" 
+                                       placeholder="ex: fisioterapia">
+                            </div>
+                            
+                            <div class="mb-0">
+                                <label for="utm_content" class="form-label">UTM Content</label>
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="utm_content" 
+                                       name="utm_content" 
+                                       value="{{ lead.utm_content or '' }}" 
+                                       placeholder="ex: banner_top">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card form-card">
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i> Salvar Alterações
+                            </button>
+                            <a href="{{ url_for('admin.view_lead', lead_id=lead.id) }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-1"></i> Cancelar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Validação do formulário Bootstrap
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            var forms = document.getElementsByClassName('needs-validation');
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+
+    // Máscara para telefone
+    document.getElementById('phone').addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 0) {
+            if (value.length <= 2) {
+                value = `(${value}`;
+            } else if (value.length <= 7) {
+                value = `(${value.substring(0, 2)}) ${value.substring(2)}`;
+            } else if (value.length <= 11) {
+                value = `(${value.substring(0, 2)}) ${value.substring(2, 7)}-${value.substring(7)}`;
+            } else {
+                value = `(${value.substring(0, 2)}) ${value.substring(2, 7)}-${value.substring(7, 11)}`;
+            }
+            e.target.value = value;
+        }
+    });
+
+    // Sincronização automática: UTM Source -> Fonte
+    document.getElementById('utm_source').addEventListener('input', function(e) {
+        const utmSource = e.target.value.trim();
+        const sourceField = document.getElementById('source');
+        
+        // Se UTM Source está preenchido, usar ele como fonte
+        if (utmSource) {
+            sourceField.value = utmSource;
+            sourceField.style.backgroundColor = '#e3f2fd'; // Azul claro para indicar sincronização
+        } else {
+            sourceField.value = '{{ lead.source or "" }}'; // Voltar ao valor original
+            sourceField.style.backgroundColor = '#f8f9fa'; // Cinza padrão
+        }
+    });
+
+    // Destacar visualmente a relação entre os campos
+    document.getElementById('utm_source').addEventListener('focus', function() {
+        document.getElementById('source').style.border = '2px solid #2196F3';
+    });
+    
+    document.getElementById('utm_source').addEventListener('blur', function() {
+        document.getElementById('source').style.border = '';
+    });
+</script>
+{% endblock %} 

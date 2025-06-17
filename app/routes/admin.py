@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
 from app.models.auth import login_required
 from app.models.testimonials import get_all_testimonials, get_testimonial_by_id, add_new_testimonial, update_testimonial, delete_testimonial
-from app.models.contacts import get_lead_sources, get_lead_details, get_dashboard_data, get_qualified_leads
+from app.models.contacts import get_lead_sources, get_lead_details, get_dashboard_data, get_qualified_leads, get_all_leads_with_details, get_lead_by_id, update_lead, delete_lead
 from app.models.utm_links import get_all_utm_links, get_utm_link_by_id, add_utm_link, update_utm_link, delete_utm_link, generate_utm_url
 import json
 
@@ -62,7 +62,7 @@ def delete_testimonial_route(id):
 @login_required
 def reports():
     sources = get_lead_sources()
-    leads = get_lead_details()
+    leads = get_all_leads_with_details()  # Usar a nova função com mais detalhes
     dashboard_data = get_dashboard_data()
     
     # Converter dados de gráficos para JSON para uso no JavaScript
@@ -79,6 +79,57 @@ def reports():
 def qualified_leads():
     qualified = get_qualified_leads()
     return render_template('admin/qualified_leads.html', qualified_leads=qualified)
+
+# Rotas para gerenciamento de leads
+@bp.route('/leads/<int:lead_id>')
+@login_required
+def view_lead(lead_id):
+    lead = get_lead_by_id(lead_id)
+    if not lead:
+        flash('Lead não encontrado!', 'danger')
+        return redirect(url_for('admin.reports'))
+    return render_template('admin/lead_details.html', lead=lead)
+
+@bp.route('/leads/<int:lead_id>/editar', methods=['GET', 'POST'])
+@login_required
+def edit_lead(lead_id):
+    lead = get_lead_by_id(lead_id)
+    if not lead:
+        flash('Lead não encontrado!', 'danger')
+        return redirect(url_for('admin.reports'))
+    
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        phone = request.form['phone']
+        issue = request.form['issue']
+        message = request.form['message']
+        source = request.form['source']
+        utm_source = request.form['utm_source']
+        utm_medium = request.form['utm_medium']
+        utm_campaign = request.form['utm_campaign']
+        utm_term = request.form['utm_term'] if request.form['utm_term'] else None
+        utm_content = request.form['utm_content'] if request.form['utm_content'] else None
+        
+        update_lead(lead_id, name, email, phone, issue, message, source, 
+                   utm_source, utm_medium, utm_campaign, utm_term, utm_content)
+        
+        flash('Lead atualizado com sucesso!', 'success')
+        return redirect(url_for('admin.view_lead', lead_id=lead_id))
+    
+    return render_template('admin/lead_form.html', lead=lead)
+
+@bp.route('/leads/<int:lead_id>/excluir', methods=['POST'])
+@login_required
+def delete_lead_route(lead_id):
+    lead = get_lead_by_id(lead_id)
+    if not lead:
+        flash('Lead não encontrado!', 'danger')
+        return redirect(url_for('admin.reports'))
+    
+    delete_lead(lead_id)
+    flash('Lead excluído com sucesso!', 'success')
+    return redirect(url_for('admin.reports'))
 
 @bp.route('/api/dashboard-data')
 @login_required
